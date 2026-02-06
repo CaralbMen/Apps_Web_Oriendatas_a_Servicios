@@ -6,15 +6,14 @@ const lista= document.getElementById('listaProductos');
 boton.addEventListener('click', async()=>{
     try{
         const respuesta= await fetch('http://localhost:4000/api/productos');
-        
         const datos= await respuesta.json();
         lista.innerHTML="";
         datos.forEach(producto => {
-            //const li= document.createElement('li');
+            const li= document.createElement('li');
             if(parseInt(producto.stock)>5){
-                lista.innerHTML='<li>'+producto.nombre+' - '+producto.precio+' - '+producto.stock+'</li>';
+                li.innerHTML=`${producto.nombre} - ${producto.precio} - ${producto.stock}`;
             }else{
-                lista.innerHTML=`<li>${producto.nombre} - ${producto.precio} - <span style="color:red">${producto.stock}</span></li>`;
+                li.innerHTML=`${producto.nombre} - ${producto.precio} - <span style="color:red">${producto.stock}</span>`;
             }
             lista.appendChild(li);
         });

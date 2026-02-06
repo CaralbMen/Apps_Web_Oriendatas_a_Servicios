@@ -1,7 +1,8 @@
-//const mysql = require('mysql2/promise');
+//Pa importar config de .env (Se usa en ambos casos)
 require('dotenv').config();
-// const pg = require('pg');
 
+//Pa usar la db con mysql
+//const mysql = require('mysql2/promise');
 // const pool= mysql.createPool({
 //     host: process.env.DB_HOST,
 //     user: process.env.DB_USER,
@@ -12,7 +13,6 @@ require('dotenv').config();
 //     connectionLimit: 10,
 //     queueLimit: 0
 // });
-
 // pool.getConnection()
 //     .then(connection=>{
 //         pool.releaseConnection(connection);
@@ -20,15 +20,18 @@ require('dotenv').config();
 //     })
 //     .catch(err=> console.log('Error de conexion: ', err.code));
 
-const { Pool } = require('pg');
-const pool = new Pool({
+
+
+//IMportante, si se usa const variable= require, se puede usar module.exports= pool
+const pg= require('pg');
+const pool= new pg.Pool({
     host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
     port: process.env.DB_PORT,
-    max: 10,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD
 });
+
+
+//Exportar el pool para los otros archivos (se usa en ambos casos)
 module.exports= pool;

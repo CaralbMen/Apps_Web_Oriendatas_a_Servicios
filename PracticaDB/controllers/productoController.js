@@ -1,5 +1,5 @@
 const pool = require('../config/db');
-
+//import {pool} from '../config/db.js';
 // const getProductos= async(req, res)=>{
 //     try{
 //         const [rows]= await pool.query('SELECT * FROM PRODUCTOS');
@@ -10,7 +10,7 @@ const pool = require('../config/db');
 // }
 const getProductos= async(req, res)=>{
     try{
-        const {resultado}= await pool.query('SELECT * FROM producto');
+        const resultado= await pool.query('SELECT * FROM producto');
         res.json(resultado.rows);
     }catch(error){
         res.status(500).json({mensaje: error});
