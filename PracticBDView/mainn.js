@@ -10,11 +10,11 @@ boton.addEventListener('click', async()=>{
         const datos= await respuesta.json();
         lista.innerHTML="";
         datos.forEach(producto => {
-            const li= document.createElement('li');
+            //const li= document.createElement('li');
             if(parseInt(producto.stock)>5){
-                li.innerHTML='<li>'+producto.nombre+' - '+producto.precio+' - '+producto.stock+'</li>';
+                lista.innerHTML='<li>'+producto.nombre+' - '+producto.precio+' - '+producto.stock+'</li>';
             }else{
-                li.innerHTML=`<li>${producto.nombre} - ${producto.precio} - <span style="color:red">${producto.stock}</span></li>`;
+                lista.innerHTML=`<li>${producto.nombre} - ${producto.precio} - <span style="color:red">${producto.stock}</span></li>`;
             }
             lista.appendChild(li);
         });
