@@ -1,13 +1,6 @@
 const pool = require('../config/db');
-//import {pool} from '../config/db.js';
-// const getProductos= async(req, res)=>{
-//     try{
-//         const [rows]= await pool.query('SELECT * FROM PRODUCTOS');
-//         res.json(rows);
-//     }catch(error){
-//         res.status(500).json({mensaje: error});
-//     }
-// }
+// Traté de usar las variables de resultado con llaves en lugar de corchetes y
+//marcaba error con la funcion de rowCount, por eso están sin llaves
 const getProductos= async(req, res)=>{
     try{
         const resultado= await pool.query('SELECT * FROM producto');
@@ -33,8 +26,12 @@ const crearProducto= async(req, res)=>{
             }
             if(Number.isInteger(stock)){
                 intStock= parseInt(stock);
-                //await pool.query(`INSERT INTO productos (nombre, precio, stock, descripcion) values ('${nombre}', '${precio}', '${intStock}', '${descripcion}')`);
-                await pool.query('insert into producto (nombre, precio, stock, descripcion) values ($1, $2, $3, $4)', [nombre, precio, intStock, descripcion]);
+                const insertado= await pool.query('insert into producto (nombre, precio, stock, descripcion) values ($1, $2, $3, $4) RETURNING *', [nombre, precio, intStock, descripcion]);
+                if(insertado.rowCount===0){
+                    res.status(400).json({
+                        error: "Error al insertar el producto"
+                    });
+                }
                 res.status(201).json({mensaje: 'Producro agregado'});
             }else{
                 res.status(400).json({
@@ -42,35 +39,20 @@ const crearProducto= async(req, res)=>{
                     status: 400
                 })
             }
-        
         }catch(error){
             console.log(error);
             res.status(500).json({error:`'Error en la BD al insertar> ${error}`});
         }
     }
-// const crearProducto= async(req, res)=>{
-//     try{
-//         const {nombre, precio, stock, descripcion= ''}= req.body;
-//         const {resultado} =await pool.query('insert into producto(nombre, precio, stock) values ($1, $2, $3) returning id', [nombre, precio, stock]);
-//         //res.status(201).json({mensaje: 'Producto agregado correctamente'});
-//         if(resultado.rows.length>0){
-//             res.status(201).json({mensaje: 'Producto agregado correctamente', id: resultado.rows[0].id});
-//         }
-//     }catch(error){
-//         console.log(error);
-//         res.status(500).json({error:`'Error en la BD al insertar> ${error}`});
-//     }
-// }
+
 
 const modificarProducto= async(req, res)=>{
     const id= parseInt(req.params.id);
-    
     precio= req.body.precio;
     stock= req.body.stock;
     try{
-        //const [resultado] = await pool.query(`UPDATE productos set precio=${precio}, stock= ${stock} where id=${id}`);
-        const {resultado} = await pool.query('update producto set precio=$1, stock=$2 where id=$3', [precio, stock, id]);
-        if(resultado.affectedRows===0){
+        const resultado = await pool.query('update producto set precio=$1, stock=$2 where id=$3 returning *', [precio, stock, id]);
+        if(resultado.rowCount===0){
             res.status(404).json({mensaje: 'Producto no encontrado'});
         }
         res.status(201).json({mensaje: 'Producto Modificado correctamente'});
@@ -85,9 +67,8 @@ const modificarProducto= async(req, res)=>{
 const eliminarProducto= async(req, res)=>{
     const id=parseInt(req.params.id);
     try{
-        //const [resultado] =await pool.query(`delete from productos where id=${id}`);
-        const {resultado} =await pool.query('delete from producto where id=$1', [id]);
-        if(resultado.affectedRows===0){
+        const resultado =await pool.query('delete from producto where id=$1 returning *', [id]);
+        if(resultado.rowCount===0){
             res.status(404).json({mensaje: 'Producto no encontrado'});
         }
         
