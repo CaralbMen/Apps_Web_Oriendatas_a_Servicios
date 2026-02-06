@@ -26,13 +26,13 @@ const crearProducto= async(req, res)=>{
             }
             if(Number.isInteger(stock)){
                 intStock= parseInt(stock);
-                const insertado= await pool.query('insert into producto (nombre, precio, stock, descripcion) values ($1, $2, $3, $4) RETURNING *', [nombre, precio, intStock, descripcion]);
+                const insertado= await pool.query('insert into producto (nombre, precio, stock, descripcion) values ($1, $2, $3, $4) RETURNING id', [nombre, precio, intStock, descripcion]);
                 if(insertado.rowCount===0){
                     res.status(400).json({
                         error: "Error al insertar el producto"
                     });
                 }
-                res.status(201).json({mensaje: 'Producro agregado'});
+                res.status(201).json({mensaje: 'Producro agregado', id: insertado.rows[0].id});
             }else{
                 res.status(400).json({
                     error:"El stock no puede ser decimal",
@@ -48,8 +48,7 @@ const crearProducto= async(req, res)=>{
 
 const modificarProducto= async(req, res)=>{
     const id= parseInt(req.params.id);
-    precio= req.body.precio;
-    stock= req.body.stock;
+    const {precio, stock}= req.body;
     try{
         const resultado = await pool.query('update producto set precio=$1, stock=$2 where id=$3 returning *', [precio, stock, id]);
         if(resultado.rowCount===0){
