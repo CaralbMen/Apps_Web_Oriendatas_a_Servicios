@@ -1,18 +1,20 @@
-create table producto(
-	id serial primary key,
-	nombre varchar(50) not null,
-	precio decimal(10,2) not null,
-	stock int default 0,
-	descripcion varchar(50)
+create table productos(
+	id serial primary key, 
+	nombre varchar(100) not null,
+	precio decimal (10,2) not null,
+	stock int default 0
 );
 
-comment on table public.producto is 'Esta tabla almacena los productos';
-comment on column public.producto.id is 'Campo para almacenar el id, Serial para que autoincremente';
-comment on column public.producto.nombre is 'Campo para almacenar el nombre, maximo 50 caracteres';
-comment on column public.producto.precio is 'Campo para almacenar el precio del producto maximo 10 enteros, 2 decimales';
-comment on column public.producto.stock is 'Campo para almacenar el stock, por defecto se pone cero';
-comment on column public.producto.descripcion is 'Campo para almacenar la descripcion, maximo 50 caracteres';
 
-insert into producto (nombre, precio, stock, descripcion) values
-('Teclado', 167.30, 3, 'Mecanico') returning id;
-select * from producto;
+comment on table public.productos is 'Esta tabla almacena los productos';
+comment on column public.productos.id is 'En este campo va el ID, int serial';
+comment on column public.productos.nombre is 'Aqui se almacena el nombre del producto max 100 caracteres';
+comment on column public.productos.precio is 'Aqui se almacena el precio del producto. Decimal 10 enteros 2 decimales';
+comment on column public.productos.stock is 'Aqui se almacena el stock disponible de los productos. Entero';
+
+alter table productos add column descripcion text, add column imagen_url tex;
+
+comment on column public.productos.descripcion is 'Descripcion de los productos, tipo text';
+comment on column public.productos.imagen_url is 'Direccion de la imagen del producto';
+
+select * from productos;
