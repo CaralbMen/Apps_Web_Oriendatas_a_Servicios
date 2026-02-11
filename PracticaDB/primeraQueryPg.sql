@@ -18,3 +18,22 @@ comment on column public.productos.descripcion is 'Descripcion de los productos,
 comment on column public.productos.imagen_url is 'Direccion de la imagen del producto';
 
 select * from productos;
+
+truncate productos;
+
+create table  categorias(
+	id serial primary key,
+	nombre text
+)
+
+select * From categorias;
+drop table categorias;
+truncate categorias;
+
+1	"men's clothing"
+2	"jewelery"
+3	"electronics"
+4	"women's clothing"
+
+alter table productos add column id_categoria int;
+alter table productos add constraint fk_categoria foreign key(id_categoria) references categorias(id); 
