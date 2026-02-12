@@ -8,7 +8,7 @@ const app= express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/api/productos', productoRouts);
-
+app.use('/api', productoRouts);
+// app.use('/api/categorias', productoRouts);
 
 app.listen(PORT, ()=> console.log(`App escuchando en puerto ${PORT}`));

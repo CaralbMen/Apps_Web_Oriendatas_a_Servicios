@@ -20,8 +20,17 @@ const aniadirIdCategoria= async(request, response)=>{
         response.status(500).json({error: e});
     }   
 }
+// 
+//Se usa await client.query('BEGIN) para usar un proceso dentro de la db para hacer operaciones
 
+//Ejecutar consultas
 
+// se usa un await client.query('COMMIT') para confirmar los cambios terminados
+
+//En catch() se usa un  await client.query('ROLLBACK') para deshacer los cambios realizados en caso de error
+
+//Luego del catch() se usa un 
+//finally(){ client.release() } para liberar el cliente de la conexión a la base de datos
 const poblarCategorias= async(request, response)=>{
     try{
         const apiFetch= await fetch('https://fakestoreapi.com/products');

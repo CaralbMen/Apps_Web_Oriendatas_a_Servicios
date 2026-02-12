@@ -17,7 +17,7 @@ alter table productos add column descripcion text, add column imagen_url tex;
 comment on column public.productos.descripcion is 'Descripcion de los productos, tipo text';
 comment on column public.productos.imagen_url is 'Direccion de la imagen del producto';
 
-select * from productos;
+select * from productos where nombre like '%Cot%';
 
 truncate productos;
 
@@ -30,10 +30,9 @@ select * From categorias;
 drop table categorias;
 truncate categorias;
 
-1	"men's clothing"
-2	"jewelery"
-3	"electronics"
-4	"women's clothing"
+
 
 alter table productos add column id_categoria int;
 alter table productos add constraint fk_categoria foreign key(id_categoria) references categorias(id); 
+
+alter table categorias add constraint unique_cat unique(nombre);

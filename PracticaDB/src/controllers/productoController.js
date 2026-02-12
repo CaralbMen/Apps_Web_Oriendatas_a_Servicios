@@ -78,5 +78,27 @@ const eliminarProducto= async(req, res)=>{
     }
        
 }
+//select * from productos where nombre like '%Cot%';
+const obtenerNombre= async(req, res)=>{
+    const nombre= req.params.nombre;
+    try{
+        console.log(nombre);
+        const resultado= await pool.query(`select * from productos where nombre ilike '%${nombre}%'`);
+        res.json(resultado.rows);
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+}
+const obtenerCategoria= async(req, res)=>{
+    const categoria= req.params.categoria;
+    try{
+        console.log(categoria);
+        const resultado= await pool.query('select * from categorias where nombre ilike $1', [`%${categoria}%`]);
+        console.log(resultado);
+        res.json(resultado.rows);
+    }catch(e){
+        res.status(500).json({error: e})
+    }
+}
 
-module.exports= {getProductos, crearProducto, modificarProducto, eliminarProducto};
+module.exports= {getProductos, crearProducto, modificarProducto, eliminarProducto, obtenerNombre, obtenerCategoria};
