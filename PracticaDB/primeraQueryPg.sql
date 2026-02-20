@@ -19,6 +19,8 @@ comment on column public.productos.imagen_url is 'Direccion de la imagen del pro
 
 select * from productos where nombre like '%Cot%';
 
+select p.id, p.nombre, precio, stock, descripcion, c.nombre from productos p inner join categorias c
+on p.id_categoria= c.id;
 truncate productos;
 
 create table  categorias(
@@ -36,3 +38,11 @@ alter table productos add column id_categoria int;
 alter table productos add constraint fk_categoria foreign key(id_categoria) references categorias(id); 
 
 alter table categorias add constraint unique_cat unique(nombre);
+
+
+create table USUARIOS(
+	id serial primary key,
+	email varchar(100) not null unique,
+	password varchar(100) not null,
+	role varchar(50) default 'USER'
+);

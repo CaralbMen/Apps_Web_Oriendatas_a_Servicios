@@ -1,9 +1,8 @@
 const pool = require('../config/db');
-// Traté de usar las variables de resultado con llaves en lugar de corchetes y
-//marcaba error con la funcion de rowCount, por eso están sin llaves
+
 const getProductos= async(req, res)=>{
     try{
-        const resultado= await pool.query('SELECT * FROM producto');
+        const resultado= await pool.query('SELECT * FROM productos');
         res.json(resultado.rows);
     }catch(error){
         res.status(500).json({mensaje: error});
@@ -26,7 +25,7 @@ const crearProducto= async(req, res)=>{
             }
             if(Number.isInteger(stock)){
                 intStock= parseInt(stock);
-                const insertado= await pool.query('insert into producto (nombre, precio, stock, descripcion) values ($1, $2, $3, $4) RETURNING id', [nombre, precio, intStock, descripcion]);
+                const insertado= await pool.query('insert into productos (nombre, precio, stock, descripcion) values ($1, $2, $3, $4) RETURNING id', [nombre, precio, intStock, descripcion]);
                 if(insertado.rowCount===0){
                     res.status(400).json({
                         error: "Error al insertar el producto"
@@ -50,7 +49,7 @@ const modificarProducto= async(req, res)=>{
     const id= parseInt(req.params.id);
     const {precio, stock}= req.body;
     try{
-        const resultado = await pool.query('update producto set precio=$1, stock=$2 where id=$3 returning *', [precio, stock, id]);
+        const resultado = await pool.query('update productos set precio=$1, stock=$2 where id=$3 returning *', [precio, stock, id]);
         if(resultado.rowCount===0){
             res.status(404).json({mensaje: 'Producto no encontrado'});
         }
@@ -66,7 +65,7 @@ const modificarProducto= async(req, res)=>{
 const eliminarProducto= async(req, res)=>{
     const id=parseInt(req.params.id);
     try{
-        const resultado =await pool.query('delete from producto where id=$1 returning *', [id]);
+        const resultado =await pool.query('delete from productos where id=$1 returning *', [id]);
         if(resultado.rowCount===0){
             res.status(404).json({mensaje: 'Producto no encontrado'});
         }
