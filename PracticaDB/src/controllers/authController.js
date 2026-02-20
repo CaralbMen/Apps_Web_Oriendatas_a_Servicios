@@ -26,6 +26,33 @@ const registrarUsuario= async(req, res)=>{
 const jwt= require('jsonwebtoken');
 const login= async(req, res)=>{
     const {email, password}= req.body;
-    
+    try{
+        const result= await pool.query('select * from usuarios where email=$1', [email]);
+        if(result.rows.length===0){
+            return res.status(404).json({mensaje: 'Usuario no encontrado'});
+        }
+        const usuario= result.rows[0];
+        const isMatch= await bcrypt.compare(password, usuario.password);
+        if(!isMatch){
+            return res.status(400).json({mensaje:'Password incorrecta'});
+        }
+        const payload={
+            id:usuario.id,
+            rol: usuario.rol,
+            email: usuario.email
+        };
+        const token= jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            {expiresIn: '1h'}
+        );
+        res.json({
+            mensaje: 'Bienvenido',
+            token: token
+        });
+    }catch(e){
+        console.log(e);
+        res.status(500).json({mensaje: `Error: ${e}`});
+    }
 }
 module.exports= {registrarUsuario}
