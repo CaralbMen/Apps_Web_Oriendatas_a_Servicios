@@ -47,6 +47,7 @@ const login= async(req, res)=>{
             {expiresIn: '1h'}
         );
         res.json({
+            codigo: 200,
             mensaje: 'Bienvenido',
             token: token
         });
@@ -55,4 +56,4 @@ const login= async(req, res)=>{
         res.status(500).json({mensaje: `Error: ${e}`});
     }
 }
-module.exports= {registrarUsuario}
+module.exports= {registrarUsuario, login}

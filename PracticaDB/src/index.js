@@ -11,6 +11,5 @@ app.use(cors());
 app.use(express.json());
 app.use('/api', productoRouts);
 app.use('/api/auth', authRoutes);
-// app.use('/api/categorias', productoRouts);
 
 app.listen(PORT, ()=> console.log(`App escuchando en puerto ${PORT}`));

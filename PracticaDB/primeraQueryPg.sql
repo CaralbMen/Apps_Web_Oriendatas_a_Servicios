@@ -46,3 +46,6 @@ create table USUARIOS(
 	password varchar(100) not null,
 	role varchar(50) default 'USER'
 );
+
+
+
