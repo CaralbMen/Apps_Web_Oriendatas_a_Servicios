@@ -12,7 +12,7 @@ module.exports= (req, res, next)=>{
         console.log('Se verifico');
         next();
     }catch(e){
-        console.log('Eror'+ e);
+        console.log('Error'+ e);
         res.status(401).json({msg: 'Token no valido o expirado'})
     }
 }

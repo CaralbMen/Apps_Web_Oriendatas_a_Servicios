@@ -11,6 +11,7 @@ const getProductos= async(req, res)=>{
 const crearProducto= async(req, res)=>{
         try{
             const {nombre, precio, descripcion= '',imagen, categoria}= req.body;
+            console.log(req.body);
             if(!nombre){
                 res.status(400).json({
                     error: "El nombre no puede estar vacio",
@@ -29,11 +30,7 @@ const crearProducto= async(req, res)=>{
                     status: 400
                 })
             }
-            if(Number.isInteger(categoria)){
-
-                // categoriaa= await pool.query('select id from categorias where nombre= $1',[categoria])
-
-                intStock= parseInt(stock);
+ 
                 const insertado= await pool.query('insert into productos (nombre, precio, descripcion, imagen_url, id_categoria) values ($1, $2, $3, $4, $5) RETURNING id', [nombre, precio, descripcion, imagen, categoria]);
                 if(insertado.rowCount===0){
                     res.status(400).json({
@@ -41,12 +38,7 @@ const crearProducto= async(req, res)=>{
                     });
                 }
                 res.status(201).json({mensaje: 'Producro agregado', id: insertado.rows[0].id});
-            }else{
-                res.status(400).json({
-                    error:"Escribir el ID de la categoria",
-                    status: 400
-                })
-            }
+           
         }catch(error){
             console.log(error);
             res.status(500).json({error:`'Error en la BD al insertar: ${error}`});
