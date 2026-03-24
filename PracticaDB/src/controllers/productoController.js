@@ -10,7 +10,7 @@ const getProductos= async(req, res)=>{
 }
 const crearProducto= async(req, res)=>{
         try{
-            const {nombre, precio, stock, descripcion= '',imagen, categoria, youtube_id}= req.body;
+            const {nombre, precio, stock, descripcion= '',imagen, categoria, youtube_id, latitud, longitud}= req.body;
             console.log(req.body);
             if(!nombre){
                 res.status(400).json({
@@ -31,8 +31,8 @@ const crearProducto= async(req, res)=>{
                 })
             }
  
-            const insertado= await pool.query('insert into productos (nombre, precio, stock, descripcion, imagen_url, id_categoria, youtube_id) values ($1, $2, $3, $4, $5, $6, $7) RETURNING id', 
-                [nombre, precio, stock||0, descripcion, imagen, categoria, youtube_id || null]);
+            const insertado= await pool.query('insert into productos (nombre, precio, stock, descripcion, imagen_url, id_categoria, youtube_id, latitud, longitud) values ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id', 
+                [nombre, precio, stock||0, descripcion, imagen, categoria, youtube_id || null, latitud || null, longitud || null]);
             if(insertado.rowCount===0){
                 res.status(400).json({
                     error: "Error al insertar el producto"
