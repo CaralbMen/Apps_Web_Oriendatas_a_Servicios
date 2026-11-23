@@ -10,4 +10,5 @@ const pool= new pg.Pool({
     password: process.env.DB_PASSWORD
 });
 pool.on('connect',()=> console.log('Conexion exitosa'));
+
 module.exports= pool;
