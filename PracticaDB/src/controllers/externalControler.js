@@ -62,11 +62,12 @@ const poblarProductos= async(request, response)=>{
         let inserciones=0;
         //Destructurar el objeto
         for(const producto of productos){
-            const {title, price, description, image}= producto;
+            const {title, price, description, image, category}= producto;
+            const id_cat= await pool.query(`select id from categorias where nombre = $1`, [category]);
             const stock= Math.floor(Math.random()*50) +1;
             await pool.query(
-                `INSERT INTO productos(nombre, precio, stock, descripcion, imagen_url) values 
-                ($1, $2, $3, $4, $5)`, [title, price, stock, description, image]
+                `INSERT INTO productos(nombre, precio, stock, descripcion, imagen_url, id_categoria) values 
+                ($1, $2, $3, $4, $5, $6)`, [title, price, stock, description, image, id_cat]
             );
 
             inserciones++;
