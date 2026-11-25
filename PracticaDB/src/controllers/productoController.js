@@ -10,12 +10,15 @@ async function getProductos(req, res) {
 
 async function obtenerPorId(req, res) {
     const resultado = await pool.query(
-        'select * from productos where id = $1 and id_usuario = $2',
-        [req.params.id, req.usuario.id]
+        'select * from productos where id = $1',
+        [req.params.id]
     );
 
     if (!resultado.rowCount) {
         return res.status(404).json({ mensaje: 'Producto no encontrado' });
+    }
+    if(resultado.id_usuario != req.usuario.id){
+        return res.status(403).json({mensaje:'Este producto pertenece a otro usuario'});
     }
     res.json(resultado.rows[0]);
 }

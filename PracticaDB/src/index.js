@@ -28,4 +28,4 @@ app.use((error, req, res, next) => {
     res.status(500).json({ mensaje: 'Error interno del servidor' });
 });
 
-app.listen(PORT, ()=> console.log(`App escuchando en puerto ${PORT}`));
+app.listen(PORT,'0.0.0.0', ()=> console.log(`App escuchando en puerto ${PORT}`));

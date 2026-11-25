@@ -11,7 +11,7 @@ router.get('/categorias/:categoria', validarApiKey, productos.obtenerCategoria);
 
 router.use('/productos', autenticar);
 router.get('/productos', productos.getProductos);
-router.get('/productos/id/:id', productos.obtenerPorId);
+router.get('/productos/id/:id', autenticar, productos.obtenerPorId);
 router.get('/productos/:nombre', productos.obtenerNombre);
 router.post('/productos/crear', productos.crearProducto);
 router.put('/productos/:id', productos.modificarProducto);

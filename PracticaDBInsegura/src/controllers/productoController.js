@@ -67,7 +67,7 @@ async function modificarProducto(req, res) {
 
 async function eliminarProducto(req, res) {
     const resultado = await pool.query(
-        'delete from productos where id = $1',
+        'delete from productos where id = $1 returning id',
         [req.params.id]
     );
 
