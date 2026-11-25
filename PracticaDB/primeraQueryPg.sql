@@ -25,3 +25,23 @@ create table usuarios(
 	password text,
 	role text
 );
+
+
+
+begin;
+
+alter table usuarios
+    alter column role set default 'usuario';
+
+update usuarios
+set role = 'usuario'
+where role is null;
+
+create unique index if not exists usuarios_email_unico
+    on usuarios (email);
+
+alter table productos
+    add column if not exists id_usuario integer
+    constraint fk_productos_usuario references usuarios(id);
+
+commit;

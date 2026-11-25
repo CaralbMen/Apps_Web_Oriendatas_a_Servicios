@@ -1,64 +1,24 @@
 const express = require('express');
-const router= express.Router();
-const productoController= require('../controllers/productoController');
-const {poblarProductos, poblarCategorias, aniadirIdCategoria}= require('../controllers/externalControler');
+const productos = require('../controllers/productoController');
+const externo = require('../controllers/externalControler');
+const {
+    autenticar, soloAdministrador, validarApiKey
+} = require('../middleware/authMiddleware');
 
+const router = express.Router();
 
-//Controlador de los productos en la primera practica
-router.get('/productos/', productoController.getProductos);
-router.post('/productos/crear', productoController.crearProducto);
-router.put('/productos/:id', productoController.modificarProducto);
-router.delete('/productos/:id', productoController.eliminarProducto);
-router.get('/productos/:nombre', productoController.obtenerNombre);
-router.get('/categorias/:categoria', productoController.obtenerCategoria);
+router.get('/categorias/:categoria', validarApiKey, productos.obtenerCategoria);
 
-//Controlador conectado a la API exterana para poblar  la db
-router.post('/poblar', poblarProductos);
-router.post('/poblarCategorias', poblarCategorias);
-router.post('/aniadirIdCategoria', aniadirIdCategoria);
+router.use('/productos', autenticar);
+router.get('/productos', productos.getProductos);
+router.get('/productos/id/:id', productos.obtenerPorId);
+router.get('/productos/:nombre', productos.obtenerNombre);
+router.post('/productos/crear', productos.crearProducto);
+router.put('/productos/:id', productos.modificarProducto);
+router.delete('/productos/:id', productos.eliminarProducto);
 
-module.exports= router;
+router.post('/poblar', autenticar, soloAdministrador, externo.poblarProductos);
+router.post('/poblarCategorias', autenticar, soloAdministrador, externo.poblarCategorias);
+router.post('/aniadirIdCategoria', autenticar, soloAdministrador, externo.aniadirIdCategoria);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const authMiddleware= require('../middleware/authMiddleware')
+module.exports = router;

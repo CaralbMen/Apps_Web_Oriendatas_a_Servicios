@@ -64,10 +64,17 @@ const poblarProductos= async(request, response)=>{
         for(const producto of productos){
             const {title, price, description, image, category}= producto;
             const id_cat= await pool.query(`select id from categorias where nombre = $1`, [category]);
+            if (!id_cat.rowCount) {
+            return response.status(409).json({
+                mensaje: 'Primero carga las categorías con /api/poblarCategorias'
+            });
+}
             const stock= Math.floor(Math.random()*50) +1;
             await pool.query(
-                `INSERT INTO productos(nombre, precio, stock, descripcion, imagen_url, id_categoria) values 
-                ($1, $2, $3, $4, $5, $6)`, [title, price, stock, description, image, id_cat]
+                `insert into productos
+                (nombre, precio, stock, descripcion, imagen_url, id_categoria, id_usuario)
+                values ($1, $2, $3, $4, $5, $6, $7)`,
+                [title, price, stock, description, image, id_cat.rows[0].id, request.usuario.id]
             );
 
             inserciones++;
