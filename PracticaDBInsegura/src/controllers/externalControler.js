@@ -85,4 +85,10 @@ const poblarProductos= async(request, response)=>{
         response.status(500).json({error: e});
     }
 }
-module.exports= {poblarProductos, poblarCategorias, aniadirIdCategoria};
+
+
+// Saludo para ver que jale
+const saludo= async(req, res)=>{
+    res.status(200).json({mensaje: "Hola Mundo de las APIS. Esta api funciona re bien"});
+}
+module.exports= {poblarProductos, poblarCategorias, aniadirIdCategoria, saludo};

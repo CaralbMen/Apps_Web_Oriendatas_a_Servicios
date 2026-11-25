@@ -16,5 +16,6 @@ router.delete('/productos/:id', productos.eliminarProducto);
 router.post('/poblar', externo.poblarProductos);
 router.post('/poblarCategorias', externo.poblarCategorias);
 router.post('/aniadirIdCategoria', externo.aniadirIdCategoria);
+router.get('/saludo', externo.saludo);
 
 module.exports = router;
